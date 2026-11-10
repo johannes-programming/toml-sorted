@@ -14,11 +14,6 @@ def parse_args(args: Iterable[str] | None = None) -> argparse.Namespace:
     parser: argparse.ArgumentParser
     parser = argparse.ArgumentParser(fromfile_prefix_chars="@")
     parser.add_argument(
-        "filepatterns",
-        nargs="*",
-        default=[],
-    )
-    parser.add_argument(
         "--all-indices",
         action="append_const",
         const=Selector.ALL_INDICES,
@@ -52,6 +47,11 @@ def parse_args(args: Iterable[str] | None = None) -> argparse.Namespace:
         action="append_const",
         const=Instruction.SORT_REVERSE,
         dest="instructions",
+    )
+    parser.add_argument(
+        "filepatterns",
+        nargs="*",
+        default=[],
     )
     parser.set_defaults(instructions=[])
     return parser.parse_args(args)
