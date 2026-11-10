@@ -31,15 +31,15 @@ def parse_args(args: Iterable[str] | None = None) -> argparse.Namespace:
         dest="instructions",
     )
     parser.add_argument(
-        "--key",
-        action="append",
-        dest="instructions",
-    )
-    parser.add_argument(
         "--index",
         action="append",
         dest="instructions",
         type=int,
+    )
+    parser.add_argument(
+        "--key",
+        action="append",
+        dest="instructions",
     )
     parser.add_argument(
         "--sort",
