@@ -28,7 +28,7 @@ license-files = [
 name = "toml_sorted"
 readme = "README.rst"
 requires-python = ">=3.11"
-version = "1.0.2"
+version = "1.0.2.post0"
 
 [project.urls]
 Download = "https://pypi.org/project/toml_sorted/#files"
