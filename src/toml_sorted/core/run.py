@@ -5,6 +5,7 @@ __all__: list[str] = ["run"]
 import glob
 import io
 import os
+import sys
 import tomllib
 from collections.abc import Iterable
 from typing import Any, overload
@@ -53,6 +54,9 @@ def run(
     parsed: list[tuple[Instruction, list[Selector | int | str]]]
     parsed = parse_instructions(instructions)
     absfiles = get_absfiles(filepatterns)
+    if not absfiles:
+        print("toml_sorted: warning: no files matched", file=sys.stderr)
+        return
     run_instructions_on_files(absfiles=absfiles, parsed=parsed)
 
 
