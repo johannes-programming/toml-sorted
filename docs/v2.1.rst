@@ -72,6 +72,10 @@ into
 ``toml_sorted.core.run.run(*filepatterns: str, instructions: Iterable[Instruction | Selector | int | str] = ()) -> None``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. container:: versionchanged
+
+    **Changed in version 2.1:** The items of ``instructions`` now also permit ``Selector``.
+
 ``toml_sorted.enum``
 ''''''''''''''''''''
 
@@ -86,6 +90,10 @@ into
 
 ``class toml_sorted.enum.Selector.Selector``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. container:: versionadded
+
+    **Added in version 2.1.**
 
 ``ALL_KEYS``
 ^^^^^^^^^^^^
