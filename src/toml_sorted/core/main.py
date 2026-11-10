@@ -1,67 +1,33 @@
+from __future__ import annotations
+
+__all__: list[str] = ["main"]
+
+
 import argparse
 import logging
-import sys
-from collections.abc import Iterable
-from typing import Any, Optional
+from collections import abc
+from typing import Any
 
-import setdoc
-
-from ..enum.Instruction import Instruction
-from ..enum.Selector import Selector
-from .run import run
-
-__all__ = ["main"]
+from toml_sorted.core.parse_args import parse_args
+from toml_sorted.core.run import run
 
 
-@setdoc.basic
-def main(args: Optional[Iterable[str]] = None, /) -> None:
+def main(args: abc.Iterable[str] | None = None) -> int:
+    filepatterns: abc.Sequence[str]
     kwargs: dict[str, Any]
-    parser: argparse.ArgumentParser
-    parser = argparse.ArgumentParser(fromfile_prefix_chars="@")
-    parser.add_argument(
-        "filepatterns",
-        nargs="*",
-        default=[],
-    )
-    parser.add_argument(
-        "--all-indices",
-        action="append_const",
-        const=Selector.ALL_INDICES,
-        dest="instructions",
-    )
-    parser.add_argument(
-        "--all-keys",
-        action="append_const",
-        const=Selector.ALL_KEYS,
-        dest="instructions",
-    )
-    parser.add_argument(
-        "--key",
-        action="append",
-        dest="instructions",
-    )
-    parser.add_argument(
-        "--index",
-        action="append",
-        dest="instructions",
-        type=int,
-    )
-    parser.add_argument(
-        "--sort",
-        action="append_const",
-        const=Instruction.SORT,
-        dest="instructions",
-    )
-    parser.add_argument(
-        "--sort-reverse",
-        action="append_const",
-        const=Instruction.SORT_REVERSE,
-        dest="instructions",
-    )
-    parser.set_defaults(instructions=[])
-    kwargs = vars(parser.parse_args(args))
+    space: argparse.Namespace
     try:
-        run(*kwargs.pop("filepatterns"), **kwargs)
-    except Exception:
-        logging.exception("toml_sorted failed!")
-        sys.exit(1)
+        space = parse_args(args)
+        kwargs = vars(space)
+        filepatterns = kwargs.pop("filepatterns")
+        run(*filepatterns, **kwargs)
+    except SystemExit as exit:
+        if isinstance(exit.code, int):
+            return int(exit.code)
+        else:
+            return int(bool(exit.code))
+    except BaseException as exc:
+        logging.exception(exc)
+        return 1
+    else:
+        return 0

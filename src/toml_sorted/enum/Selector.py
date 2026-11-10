@@ -1,6 +1,8 @@
-import enum
+from __future__ import annotations
 
-__all__ = ["Selector"]
+__all__: list[str] = ["Selector"]
+
+import enum
 
 
 class Selector(enum.Enum):

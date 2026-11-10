@@ -1,6 +1,8 @@
-import enum
+from __future__ import annotations
 
-__all__ = ["Instruction"]
+__all__: list[str] = ["Instruction"]
+
+import enum
 
 
 class Instruction(enum.Enum):
