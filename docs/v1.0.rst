@@ -56,7 +56,7 @@ Links
 - Download: https://pypi.org/project/toml_sorted/#files
 - Index: https://pypi.org/project/toml_sorted/
 - Source: https://github.com/johannes-programming/toml_sorted/
-- Website: https://toml-sorted.johannes-programming.online/
+- Website: https://toml-get.johannes-programming.online/
 
 Impressum
 ---------
