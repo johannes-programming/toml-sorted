@@ -85,7 +85,7 @@ def main(args: abc.Iterable[str] | None = None) -> int:
         return 0
 
 
-def parse_args(args: list[str] | None = None, /) -> argparse.Namespace:
+def parse_args(args: abc.Iterable[str] | None = None, /) -> argparse.Namespace:
     parser: argparse.ArgumentParser
     parser = argparse.ArgumentParser(fromfile_prefix_chars="@")
     # parser.add_argument("--errfile", default="-")
