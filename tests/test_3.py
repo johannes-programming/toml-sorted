@@ -1,3 +1,8 @@
+from __future__ import annotations
+
+__all__: list[str] = ["TestCliAllIndices"]
+
+
 import tempfile
 import tomllib
 import unittest
@@ -8,11 +13,9 @@ import tomli_w
 
 from toml_sorted.core.main import main
 
-__all__ = ["TestCliAllIndices"]
-
 
 class TestCliAllIndices(unittest.TestCase):
-    def test_cli_accepts_all_indices_selector(self: Self) -> None:
+    def test_cli_accepts_all_indices_selector(self: Self, /) -> None:
         data: dict[str, Any]
         dataA: dict[str, Any]
         listA: list[str]

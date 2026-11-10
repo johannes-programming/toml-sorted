@@ -1,3 +1,8 @@
+from __future__ import annotations
+
+__all__: list[str] = ["TestRun"]
+
+
 import tempfile
 import tomllib
 import unittest
@@ -9,8 +14,6 @@ import tomli_w
 
 from toml_sorted.core.run import run
 from toml_sorted.enum.Instruction import Instruction
-
-__all__ = ["TestRun"]
 
 
 def get_instruction(reverse: bool) -> Instruction:
@@ -34,7 +37,7 @@ def read_toml(path: Path) -> dict[str, Any]:
 
 
 class TestRun(unittest.TestCase):
-    def test_run_sorts_root_table_ascending(self: Self) -> None:
+    def test_run_sorts_root_table_ascending(self: Self, /) -> None:
         asc: Instruction
         data: dict[str, Any]
         path: Path
@@ -47,7 +50,7 @@ class TestRun(unittest.TestCase):
             data = read_toml(path)
             self.assertEqual(list(data.keys()), ["a", "m", "z"])
 
-    def test_run_sorts_root_table_descending(self: Self) -> None:
+    def test_run_sorts_root_table_descending(self: Self, /) -> None:
         data: dict[str, Any]
         desc: Instruction
         path: Path
@@ -60,7 +63,7 @@ class TestRun(unittest.TestCase):
             data = read_toml(path)
             self.assertEqual(list(data.keys()), ["z", "m", "a"])
 
-    def test_run_sorts_nested_table_by_key_path(self: Self) -> None:
+    def test_run_sorts_nested_table_by_key_path(self: Self, /) -> None:
         asc: Instruction
         data: dict[str, Any]
         nested: Any
@@ -89,7 +92,7 @@ class TestRun(unittest.TestCase):
             nested = data["tool"]["toml_sorted"]
             self.assertEqual(list(nested.keys()), ["a", "m", "z"])
 
-    def test_run_sorts_nested_list_by_key_path(self: Self) -> None:
+    def test_run_sorts_nested_list_by_key_path(self: Self, /) -> None:
         asc: Any
         data: dict[str, Any]
         path: Path
@@ -105,7 +108,7 @@ class TestRun(unittest.TestCase):
             data = read_toml(path)
             self.assertEqual(data["project"]["numbers"], [1, 2, 3])
 
-    def test_run_accepts_glob_patterns(self: Self) -> None:
+    def test_run_accepts_glob_patterns(self: Self, /) -> None:
         asc: Instruction
         first: Path
         root: Path
@@ -122,7 +125,7 @@ class TestRun(unittest.TestCase):
             self.assertEqual(list(read_toml(first).keys()), ["a", "b"])
             self.assertEqual(list(read_toml(second).keys()), ["c", "d"])
 
-    def test_run_ignores_duplicate_file_matches(self: Self) -> None:
+    def test_run_ignores_duplicate_file_matches(self: Self, /) -> None:
         asc: Instruction
         data: dict[str, Any]
         path: Path
@@ -135,7 +138,7 @@ class TestRun(unittest.TestCase):
             data = read_toml(path)
             self.assertEqual(list(data.keys()), ["a", "b"])
 
-    def test_run_raises_type_error_for_unsortable_value(self: Self) -> None:
+    def test_run_raises_type_error_for_unsortable_value(self: Self, /) -> None:
         asc: Instruction
         path: Path
         tmpdir: str
