@@ -1,3 +1,8 @@
+from __future__ import annotations
+
+__all__: list[str] = ["TestAllKeys"]
+
+
 import tempfile
 import tomllib
 import unittest
@@ -10,8 +15,6 @@ import tomli_w
 from toml_sorted.core.run import run, run_instruction_on_data
 from toml_sorted.enum.Instruction import Instruction
 from toml_sorted.enum.Selector import Selector
-
-__all__ = ["TestAllKeys"]
 
 
 def write_toml(path: Path, data: dict[str, Any]) -> None:
@@ -27,7 +30,7 @@ def read_toml(path: Path) -> dict[str, Any]:
 
 
 class TestAllKeys(unittest.TestCase):
-    def test_all_keys_documented_example(self: Self) -> None:
+    def test_all_keys_documented_example(self: Self, /) -> None:
         # --sort --key=foo --all-keys --index=0
         data: dict[str, Any]
         result: dict[str, Any]
@@ -52,7 +55,7 @@ class TestAllKeys(unittest.TestCase):
             },
         )
 
-    def test_all_keys_expands_every_child_table(self: Self) -> None:
+    def test_all_keys_expands_every_child_table(self: Self, /) -> None:
         data: dict[str, Any]
         path: Path
         tmpdir: str
@@ -76,8 +79,7 @@ class TestAllKeys(unittest.TestCase):
             self.assertEqual(list(data["tool"]["x"].keys()), ["a", "b", "c"])
             self.assertEqual(list(data["tool"]["y"].keys()), ["m", "z"])
 
-    def test_all_keys_expands_list_elements(self: Self) -> None:
-        data: dict[str, Any]
+    def test_all_keys_expands_list_elements(self: Self, /) -> None:
         path: Path
         tmpdir: str
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -90,7 +92,7 @@ class TestAllKeys(unittest.TestCase):
                     instructions=[Instruction.SORT, "rows", Selector.ALL_KEYS],
                 )
 
-    def test_all_indices_expands_list_elements(self: Self) -> None:
+    def test_all_indices_expands_list_elements(self: Self, /) -> None:
         data: dict[str, Any]
         path: Path
         tmpdir: str
@@ -105,7 +107,7 @@ class TestAllKeys(unittest.TestCase):
             data = read_toml(path)
             self.assertEqual(data["rows"], [[1, 2, 3], [7, 8, 9]])
 
-    def test_all_keys_respects_sort_reverse(self: Self) -> None:
+    def test_all_keys_respects_sort_reverse(self: Self, /) -> None:
         data: dict[str, Any]
         result: dict[str, Any]
         data = {"foo": {"a": [3, 1, 2], "b": [6, 5, 4]}}
@@ -116,7 +118,7 @@ class TestAllKeys(unittest.TestCase):
         )
         self.assertEqual(result, {"foo": {"a": [3, 2, 1], "b": [6, 5, 4]}})
 
-    def test_all_keys_on_scalar_raises_type_error(self: Self) -> None:
+    def test_all_keys_on_scalar_raises_type_error(self: Self, /) -> None:
         with self.assertRaises(TypeError):
             run_instruction_on_data(
                 instruction=Instruction.SORT,

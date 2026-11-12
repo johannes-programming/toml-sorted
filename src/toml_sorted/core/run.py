@@ -1,16 +1,18 @@
+from __future__ import annotations
+
+__all__: list[str] = ["run"]
+
 import glob
+import io
 import os
 import tomllib
 from collections.abc import Iterable
-from typing import Any, cast
+from typing import Any, overload
 
-import setdoc
 import tomli_w
 
 from toml_sorted.enum.Instruction import Instruction
 from toml_sorted.enum.Selector import Selector
-
-__all__ = ["run"]
 
 
 def get_absfiles(filepatterns: Iterable[str]) -> list[str]:
@@ -43,7 +45,6 @@ def parse_instructions(
     return ans
 
 
-@setdoc.basic
 def run(
     *filepatterns: str,
     instructions: Iterable[Instruction | Selector | int | str] = (),
@@ -57,17 +58,14 @@ def run(
 
 def run_instruction_on_data(
     *,
+    data: dict[str, Any],
     instruction: Instruction,
     keys: list[Selector | int | str],
-    data: dict[str, Any],
 ) -> dict[str, Any]:
-    return cast(
-        dict[str, Any],
-        run_instruction_along_keys(
-            data,
-            instruction=instruction,
-            keys=list(keys),
-        ),
+    return run_instruction_along_keys(  # type: ignore[no-any-return]
+        data,
+        instruction=instruction,
+        keys=list(keys),
     )
 
 
@@ -104,47 +102,60 @@ def run_instruction_along_keys(
 
 
 def run_instruction_on_all_keys(
-    data: Any,
+    data: dict[str, Any],
     *,
     instruction: Instruction,
     keys: list[Selector | int | str],
-) -> Any:
-    index: int
-    key: Any
-    if isinstance(data, dict):
-        for key in list(data.keys()):
-            data[key] = run_instruction_along_keys(
-                data[key],
-                instruction=instruction,
-                keys=keys,
-            )
-        return data
-    raise TypeError(
-        f"Value {data!r} of type {type(data).__name__} has no keys to expand!"
-    )
+) -> dict[str, Any]:
+    key: str
+    if not isinstance(data, dict):
+        raise TypeError(
+            f"Value {data!r} of type {type(data).__name__} has no keys to expand!"
+        )
+    for key in list(data.keys()):
+        data[key] = run_instruction_along_keys(
+            data[key],
+            instruction=instruction,
+            keys=keys,
+        )
+    return data
 
 
 def run_instruction_on_all_indices(
-    data: Any,
+    data: list[Any],
     *,
     instruction: Instruction,
     keys: list[Selector | int | str],
-) -> Any:
+) -> list[Any]:
     index: int
-    if isinstance(data, list):
-        for index in range(len(data)):
-            data[index] = run_instruction_along_keys(
-                data[index],
-                instruction=instruction,
-                keys=keys,
-            )
-        return data
-    raise TypeError(
-        f"Value {data!r} of type {type(data).__name__} has no indices to expand!"
-    )
+    if not isinstance(data, list):
+        raise TypeError(
+            f"Value {data!r} of type {type(data).__name__} has no indices to expand!"
+        )
+    for index in range(len(data)):
+        data[index] = run_instruction_along_keys(
+            data[index],
+            instruction=instruction,
+            keys=keys,
+        )
+    return data
 
 
-def run_instruction_on_value(data: Any, *, reverse: bool) -> Any:
+@overload
+def run_instruction_on_value(
+    data: dict[str, Any], *, reverse: bool
+) -> dict[str, Any]: ...
+
+
+@overload
+def run_instruction_on_value(
+    data: list[Any], *, reverse: bool
+) -> list[Any]: ...
+
+
+def run_instruction_on_value(
+    data: dict[str, Any] | list[Any], *, reverse: bool
+) -> dict[str, Any] | list[Any]:
     if isinstance(data, dict):
         return dict(sorted(data.items(), reverse=reverse))
     if isinstance(data, list):
@@ -160,15 +171,19 @@ def run_instructions_on_files(
     parsed: list[tuple[Instruction, list[Selector | int | str]]],
 ) -> None:
     absfile: str
-    data: Any
+    data: dict[str, Any]
+    instruction: Instruction
+    istream: io.BufferedReader
+    keys: list[Selector | int | str]
+    ostream: io.BufferedWriter
     for absfile in absfiles:
-        with open(absfile, "rb") as stream:
-            data = tomllib.load(stream)
+        with open(absfile, "rb") as istream:
+            data = tomllib.load(istream)
         for instruction, keys in parsed:
             data = run_instruction_on_data(
                 data=data,
                 instruction=instruction,
                 keys=keys,
             )
-        with open(absfile, "wb") as stream:
-            tomli_w.dump(data, stream)
+        with open(absfile, "wb") as ostream:
+            tomli_w.dump(data, ostream)
