@@ -17,7 +17,7 @@ classifiers = [
     "Programming Language :: Python :: 3 :: Only",
 ]
 dependencies = [
-    "tomli_w>=1.2,<2",
+    "tomli-w<2,>=1.2",
 ]
 description = "This project sorts TOML data."
 keywords = []
@@ -28,7 +28,7 @@ license-files = [
 name = "toml-sorted"
 readme = "README.rst"
 requires-python = ">=3.11"
-version = "2.2.2.post0"
+version = "2.2.2.post1"
 
 [project.urls]
 Download = "https://pypi.org/project/toml-sorted/#files"
