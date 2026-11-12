@@ -1,5 +1,5 @@
 .ONESHELL:
-.PHONY: all add amend beautiful black build clean commit commit-version dist echo isort jacobus py311 py312 py313 py314 py315 pypi rebase reset test toml_sorted upload version
+.PHONY: all add amend beautiful black build canonicalize clean commit commit-version dist echo isort jacobus py311 py312 py313 py314 py315 pypi rebase reset test toml_sorted upload version
 SHELL := /bin/zsh
 
 all: beautiful commit-version
@@ -10,7 +10,7 @@ add:
 amend: add
 	git commit --amend --no-edit;
 
-beautiful: isort black jacobus toml_sorted
+beautiful: isort black jacobus canonicalize toml_sorted
 
 black: py311
 	conda run -n py311 pip install 'black>=24.5,<26' >/dev/null;
@@ -20,15 +20,20 @@ build: beautiful py311
 	conda run -n py311 pip install 'build>=1.3,<2' >/dev/null;
 	conda run -n py311 python -m build;
 
+canonicalize: py311
+	conda run -n py311 pip install 'tomli_w>=1.2,<2' >/dev/null;
+	conda run -n py311 pip install 'packaging>=26.3,<27' >/dev/null;
+	conda run -n py311 python make/canonicalize.py -- .
+
+clean:
+	rm -fr 'dist/';
+
 commit: add
 	git commit --allow-empty $(PARAMS);
 
 commit-version: add py311
 	conda run -n py311 pip install 'toml_get>=1.0,<2' >/dev/null;
 	git commit --allow-empty "$$(conda run -n py311 python -m toml_get @make/toml_get.txt)";
-
-clean:
-	rm -fr 'dist/';
 
 dist: clean build
 
