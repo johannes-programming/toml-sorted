@@ -25,15 +25,15 @@ license = "MIT"
 license-files = [
     "LICENSE.txt",
 ]
-name = "toml_sorted"
+name = "toml-sorted"
 readme = "README.rst"
 requires-python = ">=3.11"
-version = "1.0.2.post0"
+version = "1.0.2.post1"
 
 [project.urls]
-Download = "https://pypi.org/project/toml_sorted/#files"
-Index = "https://pypi.org/project/toml_sorted/"
-Source = "https://github.com/johannes-programming/toml_sorted/"
+Download = "https://pypi.org/project/toml-sorted/#files"
+Index = "https://pypi.org/project/toml-sorted/"
+Source = "https://github.com/johannes-programming/toml-sorted/"
 Website = "https://toml-sorted.johannes-programming.online/"
 
 [tool.mypy]
