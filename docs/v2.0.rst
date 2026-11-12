@@ -6,12 +6,12 @@ This project sorts TOML data.
 Installation
 ------------
 
-To install ``toml-sorted``, you can use ``pip``.
+To install ``toml_sorted``, you can use ``pip``.
 Open your terminal and run:
 
 .. code-block:: shell
 
-    pip install toml-sorted
+    pip install toml_sorted
 
 Typing
 ------
@@ -58,9 +58,9 @@ This project is licensed under the MIT License.
 Links
 -----
 
-- Download: https://pypi.org/project/toml-sorted/#files
-- Index: https://pypi.org/project/toml-sorted/
-- Source: https://github.com/johannes-programming/toml-sorted/
+- Download: https://pypi.org/project/toml_sorted/#files
+- Index: https://pypi.org/project/toml_sorted/
+- Source: https://github.com/johannes-programming/toml_sorted/
 - Website: https://toml-sorted.johannes-programming.online/
 
 Impressum
